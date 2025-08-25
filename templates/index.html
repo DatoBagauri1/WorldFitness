@@ -1,0 +1,470 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="home" class="hero-section">
+    <div class="hero-overlay">
+        <div class="container">
+            <div class="row min-vh-100 align-items-center">
+                <div class="col-lg-8 mx-auto text-center text-white">
+                    <h1 class="display-4 fw-bold mb-4 animate-fade-in">
+                        {{ gym_data.name }}
+                    </h1>
+                    <p class="lead mb-4 animate-fade-in-delay">
+                        პროფესიონალური სპორტული დარბაზი თანამედროვე აღჭურვილობით
+                    </p>
+                    
+                    <!-- Current Pricing Display -->
+                    <div class="pricing-hero mb-4 animate-fade-in-delay-2">
+                        <div class="bg-primary rounded-4 p-4 d-inline-block">
+                            {% if current_pricing.period == 'თვის 1-8 რიცხვამდე' %}
+                            <div class="badge bg-success fs-6 mb-2">
+                                <i data-feather="clock" class="me-2"></i>
+                                აქცია მოქმედებს 8 რიცხვამდე!
+                            </div>
+                            {% endif %}
+                            <h3 class="fw-bold mb-2">{{ current_pricing.period }}</h3>
+                            <div class="display-6 fw-bold text-warning">
+                                {{ current_pricing.price }}{{ current_pricing.currency }}
+                            </div>
+                            <p class="mb-0 small">{{ current_pricing.type }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center animate-fade-in-delay-3">
+                        <a href="#contact" class="btn btn-primary btn-lg px-4">
+                            <i data-feather="phone" class="me-2"></i>
+                            დაგვიკავშირდით
+                        </a>
+                        <a href="#services" class="btn btn-outline-light btn-lg px-4">
+                            <i data-feather="info" class="me-2"></i>
+                            მეტი ინფორმაცია
+                        </a>
+                    </div>
+                    
+                    <!-- Rating Badge -->
+                    <div class="mt-4 animate-fade-in-delay-4">
+                        <span class="badge bg-success fs-6 px-3 py-2">
+                            <i data-feather="star" class="me-1" style="width: 18px; height: 18px;"></i>
+                            {{ gym_data.rating }}/10 რეიტინგი
+                        </span>
+                        <span class="text-light-50 ms-2 small">{{ gym_data.total_reviews }} შეფასების საფუძველზე</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark mb-3">ჩვენი მომსახურება</h2>
+                <p class="lead text-muted">მაღალი ხარისხის სპორტული მომსახურება ყველა დონის სპორტსმენისთვის</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for service in gym_data.services %}
+            <div class="col-lg-6">
+                <div class="service-card h-100 p-4 bg-white rounded-4 shadow-sm">
+                    <div class="d-flex align-items-start">
+                        <div class="service-icon me-3">
+                            <div class="bg-primary rounded-circle p-3 d-inline-flex">
+                                <i data-feather="{{ service.icon }}" class="text-white" style="width: 24px; height: 24px;"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-2">{{ service.name }}</h4>
+                            <p class="text-muted mb-0">{{ service.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Schedule Section -->
+        <div class="row mt-5">
+            <div class="col-lg-10 mx-auto">
+                <h3 class="fw-bold text-center mb-4">დღის განრიგი</h3>
+                <div class="schedule-grid">
+                    {% for activity, sessions in gym_data.schedule.items() %}
+                    <div class="schedule-item bg-white rounded-3 p-4 shadow-sm mb-3">
+                        <h5 class="text-primary fw-bold mb-3">{{ activity }}</h5>
+                        {% for session in sessions %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-medium">{{ session.time }}</span>
+                            <span class="badge bg-light text-dark">{{ session.type }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark mb-3">ფასები</h2>
+                <p class="lead text-muted">გამჭვირვალე და მისაწვდომი ფასები ყველასთვის</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="pricing-cards">
+                    <!-- Early Month Pricing -->
+                    <div class="pricing-card bg-white rounded-4 shadow-lg p-5 mb-4 {% if current_pricing.period == gym_data.pricing.early_month.period %}border border-primary border-3{% endif %}">
+                        <div class="text-center">
+                            <h3 class="fw-bold text-dark mb-2">{{ gym_data.pricing.early_month.period }}</h3>
+                            <div class="display-4 fw-bold text-primary mb-2">
+                                {{ gym_data.pricing.early_month.price }}{{ gym_data.pricing.early_month.currency }}
+                            </div>
+                            <p class="text-muted mb-4">{{ gym_data.pricing.early_month.type }}</p>
+                            
+                            {% if current_pricing.period == gym_data.pricing.early_month.period %}
+                            <div class="alert alert-success">
+                                <i data-feather="check-circle" class="me-2"></i>
+                                <strong>ამჟამინდელი ფასი</strong>
+                            </div>
+                            {% endif %}
+                            
+                            <ul class="list-unstyled text-start">
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                    ულიმიტო მისვლა
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                    ყველა მომსახურება ჩართული
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                    24/7 მისვლა ({{ gym_data.hours }})
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                    ჯგუფური ვარჯიშები
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Late Month Pricing -->
+                    <div class="pricing-card bg-white rounded-4 shadow-lg p-5 {% if current_pricing.period == gym_data.pricing.late_month.period %}border border-primary border-3{% endif %}">
+                        <div class="text-center">
+                            <h3 class="fw-bold text-dark mb-2">{{ gym_data.pricing.late_month.period }}</h3>
+                            <div class="display-4 fw-bold text-primary mb-2">
+                                {{ gym_data.pricing.late_month.price }}{{ gym_data.pricing.late_month.currency }}
+                            </div>
+                            <p class="text-muted mb-4">{{ gym_data.pricing.late_month.type }}</p>
+                            
+                            {% if current_pricing.period == gym_data.pricing.late_month.period %}
+                            <div class="alert alert-success">
+                                <i data-feather="check-circle" class="me-2"></i>
+                                <strong>ამჟამინდელი ფასი</strong>
+                            </div>
+                            {% endif %}
+                            
+                            <ul class="list-unstyled text-start">
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                    ულიმიტო მისვლა
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                    ყველა მომსახურება ჩართული
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                    24/7 მისვლა ({{ gym_data.hours }})
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2" style="width: 16px; height: 16px;"></i>
+                                    ჯგუფური ვარჯიშები
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="text-muted small">
+                        <i data-feather="info" class="me-1" style="width: 16px; height: 16px;"></i>
+                        {{ gym_data.age_restriction }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Social Media Section -->
+<section class="social-hero-section py-5 position-relative overflow-hidden">
+    <div class="social-background"></div>
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="social-content p-5">
+                    <h2 class="display-4 fw-bold text-white mb-4">
+                        იყავით ჩვენთან დაკავშირებული
+                    </h2>
+                    <p class="lead text-white-50 mb-5">
+                        ნახეთ ჩვენი ყოველდღიური ვარჯიშები, წარმატებული შედეგები და მივყეთ ფიტნესის მოგზაურობაში
+                    </p>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="social-card" onclick="window.open('https://www.instagram.com/worldfitnessgeorgia/', '_blank')">
+                                <div class="social-card-inner bg-white rounded-4 p-4 shadow-lg">
+                                    <div class="social-icon instagram-icon mb-3">
+                                        <i data-feather="instagram"></i>
+                                    </div>
+                                    <h4 class="fw-bold mb-2">Instagram</h4>
+                                    <p class="text-muted mb-3">@worldfitnessgeorgia</p>
+                                    <div class="social-stats d-flex justify-content-around">
+                                        <div class="text-center">
+                                            <strong class="d-block">ვიდეოები</strong>
+                                            <small class="text-muted">ტრენინგები</small>
+                                        </div>
+                                        <div class="text-center">
+                                            <strong class="d-block">რილსი</strong>
+                                            <small class="text-muted">მოტივაცია</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="social-card" onclick="window.open('https://www.facebook.com/WorldFitnessGe/', '_blank')">
+                                <div class="social-card-inner bg-white rounded-4 p-4 shadow-lg">
+                                    <div class="social-icon facebook-icon mb-3">
+                                        <i data-feather="facebook"></i>
+                                    </div>
+                                    <h4 class="fw-bold mb-2">Facebook</h4>
+                                    <p class="text-muted mb-3">15,238+ მოწონება</p>
+                                    <div class="social-stats d-flex justify-content-around">
+                                        <div class="text-center">
+                                            <strong class="d-block">ღონისძიებები</strong>
+                                            <small class="text-muted">განცხადებები</small>
+                                        </div>
+                                        <div class="text-center">
+                                            <strong class="d-block">ფასდაკლებები</strong>
+                                            <small class="text-muted">პერსონალური ტრენერები</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-cta mt-5">
+                        <p class="text-white-50 mb-4">
+                            <i data-feather="heart" class="me-2"></i>
+                            შემოუერთდით ჩვენს 3,000+ მომხმარებელს
+                        </p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <button onclick="window.open('https://www.instagram.com/worldfitnessgeorgia/', '_blank')" 
+                                    class="btn btn-outline-light btn-lg px-4">
+                                <i data-feather="camera" class="me-2"></i>
+                                Instagram-ის მიყოლა
+                            </button>
+                            <button onclick="window.open('https://www.facebook.com/WorldFitnessGe/', '_blank')" 
+                                    class="btn btn-light btn-lg px-4">
+                                <i data-feather="thumbs-up" class="me-2"></i>
+                                Facebook Like
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trainers Section -->
+<section id="trainers" class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark mb-3">ჩვენი ტრენერები</h2>
+            <p class="lead text-muted">ჩვენი გუნდი თქვენს განკარგულებაშია</p>
+        </div>
+
+        <div class="trainers-grid">
+            {% for trainer in trainers %}
+            <div class="trainer-photo">
+                <img src="{{ url_for('static', filename='images/trainers/' ~ trainer.photo) }}" alt="Trainer" loading="lazy">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+
+
+<!-- Gallery Section -->
+<section id="gallery" class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark mb-3">ჩვენი დარბაზი</h2>
+                <p class="lead text-muted">ნახეთ ჩვენი თანამედროვე აღჭურვილობა და კომფორტული გარემო</p>
+            </div>
+        </div>
+        
+        <div class="gallery-grid">
+            {% for image_url in gym_data.gallery_images %}
+            <div class="gallery-item">
+                <img src="{{ image_url }}" alt="World Fitness gym interior" class="gallery-image" loading="lazy">
+                <div class="gallery-overlay">
+                    <i data-feather="maximize" class="gallery-icon"></i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark mb-3">დაგვიკავშირდით</h2>
+                <p class="lead text-muted">მოდით ჩვენთან და დაიწყეთ ჯანსაღი ცხოვრება დღესვე</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="contact-info bg-white rounded-4 shadow-sm p-5 h-100">
+                    <h4 class="fw-bold text-dark mb-4">კონტაქტის ინფორმაცია</h4>
+                    
+                    <div class="contact-item mb-4">
+                        <div class="d-flex align-items-center">
+                            <div class="contact-icon me-3">
+                                <div class="bg-primary rounded-circle p-2 d-inline-flex">
+                                    <i data-feather="phone" class="text-white" style="width: 20px; height: 20px;"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">ტელეფონი</h6>
+                                <a href="tel:{{ gym_data.phone }}" class="text-primary text-decoration-none">{{ gym_data.phone }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item mb-4">
+                        <div class="d-flex align-items-center">
+                            <div class="contact-icon me-3">
+                                <div class="bg-primary rounded-circle p-2 d-inline-flex">
+                                    <i data-feather="mail" class="text-white" style="width: 20px; height: 20px;"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">ელექტრონული ფოსტა</h6>
+                                <a href="mailto:{{ gym_data.email }}" class="text-primary text-decoration-none">{{ gym_data.email }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item mb-4">
+                        <div class="d-flex align-items-start">
+                            <div class="contact-icon me-3">
+                                <div class="bg-primary rounded-circle p-2 d-inline-flex">
+                                    <i data-feather="map-pin" class="text-white" style="width: 20px; height: 20px;"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">მისამართი</h6>
+                                <p class="text-muted mb-0">{{ gym_data.address }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="d-flex align-items-center">
+                            <div class="contact-icon me-3">
+                                <div class="bg-primary rounded-circle p-2 d-inline-flex">
+                                    <i data-feather="clock" class="text-white" style="width: 20px; height: 20px;"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">სამუშაო საათები</h6>
+                                <p class="text-muted mb-0">{{ gym_data.hours }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="contact-form bg-white rounded-4 shadow-sm p-5 h-100">
+                    <h4 class="fw-bold text-dark mb-4">
+                        <i data-feather="send" class="text-primary me-2"></i>
+                        მოგვწერეთ
+                    </h4>
+                    
+                    <form method="post" action="mailto:{{ gym_data.email }}?subject=ვორლდ ფიტნესი - კონსულტაცია&body=გამარჯობა,%0A%0Aმინდა მივიღო ინფორმაცია თქვენი დარბაზის შესახებ.%0A%0Aმადლობა!" enctype="text/plain">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">სახელი</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">ტელეფონი</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="+995 XXX XX XX XX">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">ელ.ფოსტა</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="message" class="form-label">შეტყობინება</label>
+                            <textarea class="form-control" id="message" name="message" rows="3" placeholder="დაწერეთ თქვენი შეკითხვა..."></textarea>
+                        </div>
+                        
+                        <div class="current-price-display bg-primary text-white rounded-3 p-3 mb-4">
+                            {% if current_pricing.period == 'თვის 1-8 რიცხვამდე' %}
+                            <div class="badge bg-success mb-2">
+                                <i data-feather="gift" class="me-1"></i>
+                                აქცია მოქმედებს!
+                            </div>
+                            {% endif %}
+                            <div class="fw-bold">დღევანდელი ფასი: {{ current_pricing.price }}{{ current_pricing.currency }}</div>
+                            <small>{{ current_pricing.period }}</small>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-fill">
+                                <i data-feather="mail" class="me-2"></i>
+                                Gmail-ით გაგზავნა
+                            </button>
+                            <a href="tel:{{ gym_data.phone }}" class="btn btn-outline-primary">
+                                <i data-feather="phone"></i>
+                            </a>
+                        </div>
+                        
+                        <p class="small text-muted mt-3 mb-0 text-center">
+                            <i data-feather="info" class="me-1" style="width: 14px; height: 14px;"></i>
+                            {{ gym_data.age_restriction }}
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

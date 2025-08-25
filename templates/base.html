@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="World Fitness - ვორლდ ფიტნესი | პროფესიონალური სპორტული დარბაზი თბილისში">
+    <meta name="keywords" content="ფიტნესი, სპორტული დარბაზი, თბილისი, აერობიკა, პილატესი, TRX">
+    
+    <title>{% block title %}World Fitness • ვორლდ ფიტნესი{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Georgian Font Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏋️</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4 d-flex align-items-center" href="#home">
+                <img src="{{ url_for('static', filename='images/world_fitness_logo.png') }}" alt="World Fitness Logo" style="height: 40px; width: auto; margin-right: 10px;">
+                ვორლდ ფიტნესი
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">მთავარი</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">მომსახურება</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">ფასები</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#trainers">ჩვენი ტრენერები</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#gallery">გალერეა</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">კონტაქტი</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-primary fw-bold d-flex align-items-center">
+                        <img src="{{ url_for('static', filename='images/world_fitness_logo.png') }}" alt="World Fitness Logo" style="height: 30px; width: auto; margin-right: 10px;">
+                        ვორლდ ფიტნესი
+                    </h5>
+                    <p class="text-light-50">პროფესიონალური სპორტული დარბაზი თანამედროვე აღჭურვილობით და გამოცდილი ინსტრუქტორებით.</p>
+                    <div class="d-flex gap-3">
+                        <span class="badge bg-primary">რეიტინგი: {{ gym_data.rating }}/10</span>
+                        <span class="badge bg-secondary">{{ gym_data.total_reviews }} შეფასება</span>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <h6 class="text-primary">სამუშაო საათები</h6>
+                    <p class="mb-1">{{ gym_data.hours }}</p>
+                    <p class="text-danger small">{{ gym_data.age_restriction }}</p>
+                    
+                    <h6 class="text-primary mt-3">მომსახურება</h6>
+                    <ul class="list-unstyled">
+                        {% for service in gym_data.services %}
+                        <li class="mb-1">
+                            <i data-feather="{{ service.icon }}" class="text-primary" style="width: 16px; height: 16px;"></i>
+                            {{ service.name }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <h6 class="text-primary">კონტაქტი</h6>
+                    <p class="mb-1">
+                        <i data-feather="phone" class="text-primary me-2" style="width: 16px; height: 16px;"></i>
+                        <a href="tel:{{ gym_data.phone }}" class="text-light text-decoration-none">{{ gym_data.phone }}</a>
+                    </p>
+                    <p class="mb-1">
+                        <i data-feather="mail" class="text-primary me-2" style="width: 16px; height: 16px;"></i>
+                        <a href="mailto:{{ gym_data.email }}" class="text-light text-decoration-none">{{ gym_data.email }}</a>
+                    </p>
+                    <p class="mb-0">
+                        <i data-feather="map-pin" class="text-primary me-2" style="width: 16px; height: 16px;"></i>
+                        {{ gym_data.address }}
+                    </p>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-secondary">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 small">&copy; 2025 World Fitness. ყველა უფლება დაცულია.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 small text-light-50">ისანი მოლი, მე-3 სართული</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Initialize Feather Icons -->
+    <script>
+        feather.replace();
+    </script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
